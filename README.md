@@ -1,5 +1,9 @@
 # Funding Pips - Senior Frontend Engineer Assessment
 
+## Visit hosted app on
+
+[Visit](https://real-time-stock-tracking-taih.vercel.app/)
+
 
   ## How to run the project
 ```bash
