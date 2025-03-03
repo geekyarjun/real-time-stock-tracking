@@ -1,19 +1,22 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { useStore } from "@/lib/store";
-import { StockInfo } from "@/components/StockInfo";
-import { TokenChart } from "@/components/TokenChart";
-import { WatchlistButton } from "@/components/WatchlistButton";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
+import { useQuery } from '@tanstack/react-query';
+import { useStore } from '@/lib/store';
+import { StockInfo } from '@/components/StockInfo';
+import { TokenChart } from '@/components/TokenChart';
+import { WatchlistButton } from '@/components/WatchlistButton';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/components/ui/use-toast';
+import { Stock } from '@/lib/types';
 
 interface Props {
   symbol: string;
   exchange: string;
-  initialStockData: any; // I will update the type according to the API response
+  initialStockData: Stock; // I will update the type according to the API response
 }
+
+const FIX_DECIMAL_DIGITS = 2;
 
 export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
   const { toast } = useToast();
@@ -21,18 +24,18 @@ export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
 
   // Client-side polling for price updates
   const { data: stockData } = useQuery({
-    queryKey: ["stock", symbol],
+    queryKey: ['stock', symbol],
     queryFn: async () => {
       const response = await fetch(
-        `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${process.env.NEXT_PUBLIC_STOCK_API_KEY}`
+        `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${process.env.NEXT_PUBLIC_STOCK_API_KEY}`,
       );
       const data = await response.json();
 
-      if (data.status === "error") {
+      if (data.status === 'error') {
         toast({
-          variant: "destructive",
-          title: "Error fetching stock data",
-          description: data.message || "Something went wrong",
+          variant: 'destructive',
+          title: 'Error fetching stock data',
+          description: data.message || 'Something went wrong',
         });
         throw new Error(data.message);
       }
@@ -88,7 +91,7 @@ export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
                     Open
                   </dt>
                   <dd className="text-2xl font-bold mt-1">
-                    ${Number(stockData?.open).toFixed(2)}
+                    ${Number(stockData?.open).toFixed(FIX_DECIMAL_DIGITS)}
                   </dd>
                 </div>
                 <div className="p-4 rounded-lg border bg-card/50">
@@ -97,7 +100,10 @@ export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
                     Previous Close
                   </dt>
                   <dd className="text-2xl font-bold mt-1">
-                    ${Number(stockData?.previous_close).toFixed(2)}
+                    $
+                    {Number(stockData?.previous_close).toFixed(
+                      FIX_DECIMAL_DIGITS,
+                    )}
                   </dd>
                 </div>
                 <div className="p-4 rounded-lg border bg-card/50">
@@ -106,7 +112,7 @@ export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
                     Day High
                   </dt>
                   <dd className="text-2xl font-bold mt-1">
-                    ${Number(stockData?.high).toFixed(2)}
+                    ${Number(stockData?.high).toFixed(FIX_DECIMAL_DIGITS)}
                   </dd>
                 </div>
                 <div className="p-4 rounded-lg border bg-card/50">
@@ -115,7 +121,7 @@ export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
                     Day Low
                   </dt>
                   <dd className="text-2xl font-bold mt-1">
-                    ${Number(stockData?.low).toFixed(2)}
+                    ${Number(stockData?.low).toFixed(FIX_DECIMAL_DIGITS)}
                   </dd>
                 </div>
               </dl>

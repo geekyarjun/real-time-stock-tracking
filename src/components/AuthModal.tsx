@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { userSchema, type UserCredentials } from "@/lib/auth";
-import { useStore } from "@/lib/store";
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { userSchema, type UserCredentials } from '@/lib/auth';
+import { useStore } from '@/lib/store';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
-import { signIn, useSession } from "next-auth/react";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/components/ui/use-toast';
+import { signIn, useSession } from 'next-auth/react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -52,12 +52,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const onSubmit = async (data: UserCredentials) => {
     try {
       const response = await fetch(
-        `/api/auth/${isLogin ? "login" : "register"}`,
+        `/api/auth/${isLogin ? 'login' : 'register'}`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const result = await response.json();
@@ -66,44 +66,44 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         throw new Error(result.message);
       }
 
-      localStorage.setItem("token", result.token);
+      localStorage.setItem('token', result.token);
       setUser(result.user);
       toast({
-        title: isLogin ? "Welcome back!" : "Account created",
+        title: isLogin ? 'Welcome back!' : 'Account created',
         description: isLogin
-          ? "Successfully logged in to your account"
-          : "Your account has been created successfully",
+          ? 'Successfully logged in to your account'
+          : 'Your account has been created successfully',
       });
       reset();
       onClose();
     } catch (error) {
       toast({
-        title: "Error",
+        title: 'Error',
         description:
-          error instanceof Error ? error.message : "Something went wrong",
-        variant: "destructive",
+          error instanceof Error ? error.message : 'Something went wrong',
+        variant: 'destructive',
       });
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await signIn("google", { callbackUrl: "/" });
+      const result = await signIn('google', { callbackUrl: '/' });
       if (result?.error) {
         throw new Error(result.error);
       }
 
       toast({
-        title: "Success",
-        description: "Successfully logged in with Google",
+        title: 'Success',
+        description: 'Successfully logged in with Google',
       });
       onClose();
     } catch (error) {
       toast({
-        title: "Error",
+        title: 'Error',
         description:
-          error instanceof Error ? error.message : "Something went wrong",
-        variant: "destructive",
+          error instanceof Error ? error.message : 'Something went wrong',
+        variant: 'destructive',
       });
     }
   };
@@ -112,7 +112,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isLogin ? "Login" : "Register"}</DialogTitle>
+          <DialogTitle>{isLogin ? 'Login' : 'Register'}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col space-y-4">
           <Button
@@ -159,7 +159,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <Input
                 id="email"
                 type="email"
-                {...register("email")}
+                {...register('email')}
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -171,7 +171,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <Input
                 id="password"
                 type="password"
-                {...register("password")}
+                {...register('password')}
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -182,7 +182,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </div>
             <div className="flex flex-col space-y-2">
               <Button type="submit">
-                {isLogin ? "Login" : "Create Account"}
+                {isLogin ? 'Login' : 'Create Account'}
               </Button>
               <Button
                 type="button"
@@ -191,7 +191,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               >
                 {isLogin
                   ? "Don't have an account? Register"
-                  : "Already have an account? Login"}
+                  : 'Already have an account? Login'}
               </Button>
             </div>
           </form>

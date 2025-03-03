@@ -12,7 +12,7 @@ export async function POST(request: Request) {
         message:
           error instanceof Error ? error.message : 'Something went wrong',
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }

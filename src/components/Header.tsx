@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useStore } from "@/lib/store";
-import { signOut } from "next-auth/react";
-import { Button } from "@/components/ui/button";
-import { AuthModal } from "@/components/AuthModal";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import StockSearchBar from "./StockSearchBar";
+import { useState } from 'react';
+import Link from 'next/link';
+import { useStore } from '@/lib/store';
+import { signOut } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
+import { AuthModal } from '@/components/AuthModal';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
+import StockSearchBar from './StockSearchBar';
 
 export function Header() {
   const { user, setUser } = useStore();
@@ -18,7 +19,7 @@ export function Header() {
     await signOut({ redirect: false });
 
     // Clear local storage and state
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setUser(null);
   };
 

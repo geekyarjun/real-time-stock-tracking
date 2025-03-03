@@ -1,5 +1,10 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import {
+  ONE_BILLION,
+  ONE_MILLION,
+  ONE_THOUSAND,
+} from '@/constants/magicNumbers';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,12 +27,13 @@ export function cn(...inputs: ClassValue[]) {
  * @returns A string representing the formatted volume.
  */
 export function formatVolume(volume: number): string {
-  if (volume >= 1e9) {
-    return `${(volume / 1e9).toFixed(2)}B`;
-  } else if (volume >= 1e6) {
-    return `${(volume / 1e6).toFixed(2)}M`;
-  } else if (volume >= 1e3) {
-    return `${(volume / 1e3).toFixed(2)}K`;
+  const FIX_DECIMAL_DIGITS = 2;
+  if (volume >= ONE_BILLION) {
+    return `${(volume / ONE_BILLION).toFixed(FIX_DECIMAL_DIGITS)}B`;
+  } else if (volume >= ONE_MILLION) {
+    return `${(volume / ONE_MILLION).toFixed(FIX_DECIMAL_DIGITS)}M`;
+  } else if (volume >= ONE_THOUSAND) {
+    return `${(volume / ONE_THOUSAND).toFixed(FIX_DECIMAL_DIGITS)}K`;
   }
   return volume.toString();
 }

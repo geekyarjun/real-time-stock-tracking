@@ -8,8 +8,11 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json(
-      { message: error instanceof Error ? error.message : 'Something went wrong' },
-      { status: 400 }
+      {
+        message:
+          error instanceof Error ? error.message : 'Something went wrong',
+      },
+      { status: 400 },
     );
   }
 }

@@ -2,8 +2,8 @@
 
 // Inspired by react-hot-toast library
 import * as React from 'react';
-
 import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
+import { ONE, ZERO } from '@/constants/magicNumbers';
 
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -25,7 +25,7 @@ const actionTypes = {
 let count = 0;
 
 function genId() {
-  count = (count + 1) % Number.MAX_SAFE_INTEGER;
+  count = (count + ONE) % Number.MAX_SAFE_INTEGER;
   return count.toString();
 }
 
@@ -76,14 +76,14 @@ export const reducer = (state: State, action: Action): State => {
     case 'ADD_TOAST':
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: [action.toast, ...state.toasts].slice(ZERO, TOAST_LIMIT),
       };
 
     case 'UPDATE_TOAST':
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
+          t.id === action.toast.id ? { ...t, ...action.toast } : t,
         ),
       };
 
@@ -108,7 +108,7 @@ export const reducer = (state: State, action: Action): State => {
                 ...t,
                 open: false,
               }
-            : t
+            : t,
         ),
       };
     }
@@ -175,8 +175,8 @@ function useToast() {
     listeners.push(setState);
     return () => {
       const index = listeners.indexOf(setState);
-      if (index > -1) {
-        listeners.splice(index, 1);
+      if (index > -ONE) {
+        listeners.splice(index, ONE);
       }
     };
   }, [state]);

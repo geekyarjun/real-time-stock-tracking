@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useStore } from "@/lib/store";
-import { AlertCircle, Wifi } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useEffect } from 'react';
+import { useStore } from '@/lib/store';
+import { AlertCircle, Wifi } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export function ConnectionStatus() {
   const { isConnected, setConnectionStatus } = useStore();
@@ -13,12 +13,12 @@ export function ConnectionStatus() {
       setConnectionStatus(navigator.onLine);
     };
 
-    window.addEventListener("online", checkConnection);
-    window.addEventListener("offline", checkConnection);
+    window.addEventListener('online', checkConnection);
+    window.addEventListener('offline', checkConnection);
 
     return () => {
-      window.removeEventListener("online", checkConnection);
-      window.removeEventListener("offline", checkConnection);
+      window.removeEventListener('online', checkConnection);
+      window.removeEventListener('offline', checkConnection);
     };
   }, [setConnectionStatus]);
 

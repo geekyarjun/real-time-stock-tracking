@@ -1,13 +1,16 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getStockData } from "@/lib/api";
-import { useStore } from "@/lib/store";
-import { formatVolume } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowDownIcon, ArrowUpIcon, Star } from "lucide-react";
-import Link from "next/link";
-import { useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ZERO } from '@/constants/magicNumbers';
+import { getStockData } from '@/lib/api';
+import { useStore } from '@/lib/store';
+import { formatVolume } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { ArrowDownIcon, ArrowUpIcon, Star } from 'lucide-react';
+import Link from 'next/link';
+import { useMemo } from 'react';
+
+const FIX_DECIMAL_DIGITS = 2;
 
 export default function DashboardWatchlist() {
   const { user, watchlist = [] } = useStore();
@@ -18,15 +21,15 @@ export default function DashboardWatchlist() {
       watchlist
         .map((item) => `${item.symbol}-${item.exchange}`)
         .sort()
-        .join(","),
-    [watchlist]
+        .join(','),
+    [watchlist],
   );
 
   // Fetch data for all watchlisted stocks
   const { data: stocksData } = useQuery({
-    queryKey: ["watchlist-stocks", watchlistSymbols],
+    queryKey: ['watchlist-stocks', watchlistSymbols],
     queryFn: async () => {
-      if (watchlist.length === 0) return [];
+      if (watchlist.length === ZERO) return [];
 
       // Batch fetch all watchlisted stocks
       const promises = watchlist.map(async (stock) => {
@@ -43,7 +46,7 @@ export default function DashboardWatchlist() {
       return results.filter(Boolean); // Remove any failed fetches
     },
     refetchInterval: 10000, // Refetch every 10 seconds
-    enabled: watchlist.length > 0, // Only fetch if there are watchlisted stocks
+    enabled: watchlist.length > ZERO, // Only fetch if there are watchlisted stocks
   });
 
   if (!user) {
@@ -69,7 +72,7 @@ export default function DashboardWatchlist() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {watchlist.length === 0 ? (
+        {watchlist.length === ZERO ? (
           <p className="text-sm text-muted-foreground">
             Your watchlist is empty. Add stocks to track them here.
           </p>
@@ -90,22 +93,23 @@ export default function DashboardWatchlist() {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold">
-                      ${Number(stock.open).toFixed(2)}
+                      ${Number(stock.open).toFixed(FIX_DECIMAL_DIGITS)}
                     </div>
                     <div
                       className={`flex items-center gap-1 text-sm ${
-                        Number(stock.change) >= 0
-                          ? "text-green-600"
-                          : "text-red-600"
+                        Number(stock.change) >= ZERO
+                          ? 'text-green-600'
+                          : 'text-red-600'
                       }`}
                     >
-                      {Number(stock.change) >= 0 ? (
+                      {Number(stock.change) >= ZERO ? (
                         <ArrowUpIcon className="h-3 w-3" />
                       ) : (
                         <ArrowDownIcon className="h-3 w-3" />
                       )}
-                      {Number(stock.change).toFixed(2)} (
-                      {Number(stock.percent_change).toFixed(2)}%)
+                      {Number(stock.change).toFixed(FIX_DECIMAL_DIGITS)} (
+                      {Number(stock.percent_change).toFixed(FIX_DECIMAL_DIGITS)}
+                      %)
                     </div>
                     <div className="text-xs text-muted-foreground">
                       Vol: {formatVolume(Number(stock.volume))}

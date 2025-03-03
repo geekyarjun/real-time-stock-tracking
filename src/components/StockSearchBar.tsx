@@ -1,12 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { useDebounce } from "@/hooks/useDebounce";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { useDebounce } from '@/hooks/useDebounce';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { ZERO } from '@/constants/magicNumbers';
+
+const MINIMUM_CHARACTERS_TO_OPEN_DROPDOWN = 2;
+const DEBOUNCED_QUERY_TIME = 300; // ms
+const ONE_SECOND = 1000; // eslint-disable-next-line no-magic-numbers
+const ONE_MINUTE = ONE_SECOND * 60; // eslint-disable-next-line no-magic-numbers
+const FIVE_MINUTES = ONE_MINUTE * 5; // eslint-disable-next-line no-magic-numbers
+const TEN_MINUTES = ONE_MINUTE * 10;
 
 interface Suggestion {
   symbol: string;
@@ -15,36 +23,37 @@ interface Suggestion {
 }
 
 const StockSearchBar = () => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, DEBOUNCED_QUERY_TIME);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { data: suggestions = [], isLoading } = useQuery<Suggestion[]>({
-    queryKey: ["stockSearch", debouncedQuery],
+    queryKey: ['stockSearch', debouncedQuery],
     queryFn: async () => {
-      if (debouncedQuery.length < 2) return [];
+      if (debouncedQuery.length < MINIMUM_CHARACTERS_TO_OPEN_DROPDOWN)
+        return [];
       const response = await fetch(
-        `https://api.twelvedata.com/symbol_search?symbol=${debouncedQuery}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`
+        `https://api.twelvedata.com/symbol_search?symbol=${debouncedQuery}&apikey=${process.env.NEXT_PUBLIC_TWELVE_DATA_API_KEY}`,
       );
       const data = await response.json();
       return data.data || [];
     },
-    enabled: debouncedQuery.length >= 2,
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 10,
+    enabled: debouncedQuery.length >= MINIMUM_CHARACTERS_TO_OPEN_DROPDOWN,
+    staleTime: FIVE_MINUTES,
+    gcTime: TEN_MINUTES,
   });
 
   useClickOutside(wrapperRef, () => setIsOpen(false));
 
   useEffect(() => {
-    setIsOpen(debouncedQuery.length >= 2);
+    setIsOpen(debouncedQuery.length >= MINIMUM_CHARACTERS_TO_OPEN_DROPDOWN);
   }, [debouncedQuery, suggestions]);
 
   const handleSelect = (exchange: string, symbol: string) => {
     router.push(`/stocks/${exchange}/${symbol}`);
-    setQuery("");
+    setQuery('');
     setIsOpen(false);
   };
 
@@ -79,7 +88,7 @@ const StockSearchBar = () => {
                 </span>
               </button>
             ))}
-            {suggestions.length === 0 && !isLoading && (
+            {suggestions.length === ZERO && !isLoading && (
               <div className="px-4 py-2 text-sm text-muted-foreground">
                 No results found
               </div>

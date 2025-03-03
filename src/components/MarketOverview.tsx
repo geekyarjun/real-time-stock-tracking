@@ -12,6 +12,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+import { ZERO } from '@/constants/magicNumbers';
+
+const FIX_DECIMAL_DIGITS = 2;
 
 export default function MarketOverview() {
   const { stocks, updateStocks } = useStore();
@@ -20,7 +23,9 @@ export default function MarketOverview() {
     const interval = setInterval(() => {
       const updatedStocks = stocks.map(generateMockPriceUpdate);
       updateStocks(updatedStocks);
-    }, 5000);
+
+      // eslint-disable-next-line
+    }, 5000); // 5s
 
     return () => clearInterval(interval);
   }, [stocks, updateStocks]);
@@ -42,19 +47,24 @@ export default function MarketOverview() {
             <TableRow key={stock.symbol}>
               <TableCell className="font-medium">{stock.symbol}</TableCell>
               <TableCell>{stock.name}</TableCell>
-              <TableCell className="text-right">${stock.price.toFixed(2)}</TableCell>
+              <TableCell className="text-right">
+                ${stock.price.toFixed(FIX_DECIMAL_DIGITS)}
+              </TableCell>
               <TableCell className="text-right">
                 <span
                   className={`flex items-center justify-end ${
-                    stock.percentageChange >= 0 ? 'text-green-600' : 'text-red-600'
+                    stock.percentageChange >= ZERO
+                      ? 'text-green-600'
+                      : 'text-red-600'
                   }`}
                 >
-                  {stock.percentageChange >= 0 ? (
+                  {stock.percentageChange >= ZERO ? (
                     <ArrowUpIcon className="h-4 w-4 mr-1" />
                   ) : (
                     <ArrowDownIcon className="h-4 w-4 mr-1" />
                   )}
-                  {Math.abs(stock.percentageChange).toFixed(2)}%
+                  {Math.abs(stock.percentageChange).toFixed(FIX_DECIMAL_DIGITS)}
+                  %
                 </span>
               </TableCell>
               <TableCell className="text-right">

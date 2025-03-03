@@ -1,8 +1,9 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { Stock, User, Trade } from "./types";
-import { initialStocks } from "./mockData";
-import { supabase } from "./supabase";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+import { Stock, User, Trade } from './types';
+import { initialStocks } from './mockData';
+import { supabase } from './supabase';
 
 interface WatchlistItem {
   symbol: string;
@@ -23,7 +24,7 @@ interface StoreState {
   addToWatchlist: (
     userId: string,
     symbol: string,
-    exchange: string
+    exchange: string,
   ) => Promise<void>;
   removeFromWatchlist: (userId: string, symbol: string) => Promise<void>;
 }
@@ -52,12 +53,12 @@ export const useStore = create<StoreState>()(
       setConnectionStatus: (status) => set({ isConnected: status }),
       loadWatchlist: async (userId: string) => {
         const { data, error } = await supabase
-          .from("watchlist_stocks")
-          .select("symbol, exchange")
-          .eq("user_id", userId);
+          .from('watchlist_stocks')
+          .select('symbol, exchange')
+          .eq('user_id', userId);
 
         if (error) {
-          console.error("Error loading watchlist:", error);
+          console.error('Error loading watchlist:', error);
           return;
         }
 
@@ -66,16 +67,16 @@ export const useStore = create<StoreState>()(
       addToWatchlist: async (
         userId: string,
         symbol: string,
-        exchange: string
+        exchange: string,
       ) => {
         const { error } = await supabase
-          .from("watchlist_stocks")
+          .from('watchlist_stocks')
           .insert([{ user_id: userId, symbol, exchange }]);
 
         if (error) {
-          if (error.code === "23505") {
+          if (error.code === '23505') {
             // unique violation
-            console.log("Stock already in watchlist");
+            console.log('Stock already in watchlist');
             return;
           }
           throw error;
@@ -86,10 +87,10 @@ export const useStore = create<StoreState>()(
       },
       removeFromWatchlist: async (userId: string, symbol: string) => {
         const { error } = await supabase
-          .from("watchlist_stocks")
+          .from('watchlist_stocks')
           .delete()
-          .eq("user_id", userId)
-          .eq("symbol", symbol);
+          .eq('user_id', userId)
+          .eq('symbol', symbol);
 
         if (error) {
           throw error;
@@ -100,12 +101,12 @@ export const useStore = create<StoreState>()(
       },
     }),
     {
-      name: "fundingpips",
+      name: 'fundingpips',
       partialize: (state) => ({
         // only persist these fields
         user: state.user,
         trades: state.trades,
       }),
-    }
-  )
+    },
+  ),
 );

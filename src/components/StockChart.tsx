@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useStore } from "@/lib/store";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartTypeSelector } from "@/components/ChartTypeSelector";
-import { StockSelector } from "@/components/StockSelector";
-import { ChartContent } from "@/components/ChartContent";
-import { Switch } from "@/components/ui/switch";
+import { useState, useEffect } from 'react';
+import { useStore } from '@/lib/store';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartTypeSelector } from '@/components/ChartTypeSelector';
+import { StockSelector } from '@/components/StockSelector';
+import { ChartContent } from '@/components/ChartContent';
+import { Switch } from '@/components/ui/switch';
+import { ZERO } from '@/constants/magicNumbers';
 
-type ChartType = "line" | "area" | "bar";
+type ChartType = 'line' | 'area' | 'bar';
 
 interface PriceData {
   [key: string]: number | string;
@@ -19,21 +20,21 @@ export function StockChart() {
   const { stocks } = useStore();
   const [selectedStocks, setSelectedStocks] = useState<string[]>([]);
   const [priceHistory, setPriceHistory] = useState<PriceData[]>([]);
-  const [chartType, setChartType] = useState<ChartType>("line");
+  const [chartType, setChartType] = useState<ChartType>('line');
   const [showPercentages, setShowPercentages] = useState(true);
 
   useEffect(() => {
-    if (stocks.length > 0 && selectedStocks.length === 0) {
+    if (stocks.length > ZERO && selectedStocks.length === ZERO) {
       setSelectedStocks([stocks[0].symbol]);
     }
   }, [stocks]);
 
   useEffect(() => {
     // Only update if we have selected stocks
-    if (selectedStocks.length === 0) return;
+    if (selectedStocks.length === ZERO) return;
 
     const selectedStockData = stocks.filter((s) =>
-      selectedStocks.includes(s.symbol)
+      selectedStocks.includes(s.symbol),
     );
 
     setPriceHistory((prev) => {
@@ -45,6 +46,7 @@ export function StockChart() {
         newPoint[stock.symbol] = stock.price;
       });
 
+      // eslint-disable-next-line no-magic-numbers
       const updatedHistory = [...prev, newPoint].slice(-20);
       return updatedHistory;
     });
@@ -80,7 +82,7 @@ export function StockChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[400px]">
-          {selectedStocks.length > 0 && (
+          {selectedStocks.length > ZERO && (
             <ChartContent
               data={priceHistory}
               type={chartType}

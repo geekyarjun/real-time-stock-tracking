@@ -8,6 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ZERO } from '@/constants/magicNumbers';
+
+const FIX_DECIMAL_DIGITS = 2;
 
 export function Portfolio() {
   const { user, stocks } = useStore();
@@ -15,7 +18,7 @@ export function Portfolio() {
   if (!user) return null;
 
   const getStockCurrentPrice = (symbol: string) => {
-    return stocks.find((s) => s.symbol === symbol)?.price || 0;
+    return stocks.find((s) => s.symbol === symbol)?.price || ZERO;
   };
 
   const calculatePositionValue = (symbol: string, quantity: number) => {
@@ -25,7 +28,7 @@ export function Portfolio() {
 
   const calculateProfitLoss = (symbol: string) => {
     const position = user.portfolio[symbol];
-    if (!position) return 0;
+    if (!position) return ZERO;
     const currentValue = calculatePositionValue(symbol, position.quantity);
     const costBasis = position.averagePrice * position.quantity;
     return currentValue - costBasis;
@@ -48,28 +51,30 @@ export function Portfolio() {
                 <h3 className="font-semibold">{symbol}</h3>
                 <p className="text-sm text-muted-foreground">
                   {position.quantity} shares @ $
-                  {position.averagePrice.toFixed(2)}
+                  {position.averagePrice.toFixed(FIX_DECIMAL_DIGITS)}
                 </p>
               </div>
               <div className="text-right">
                 <p className="font-medium">
                   $
-                  {calculatePositionValue(symbol, position.quantity).toFixed(2)}
+                  {calculatePositionValue(symbol, position.quantity).toFixed(
+                    FIX_DECIMAL_DIGITS,
+                  )}
                 </p>
                 <p
                   className={`text-sm ${
-                    calculateProfitLoss(symbol) >= 0
+                    calculateProfitLoss(symbol) >= ZERO
                       ? 'text-green-600'
                       : 'text-red-600'
                   }`}
                 >
-                  {calculateProfitLoss(symbol) >= 0 ? '+' : ''}$
-                  {calculateProfitLoss(symbol).toFixed(2)}
+                  {calculateProfitLoss(symbol) >= ZERO ? '+' : ''}$
+                  {calculateProfitLoss(symbol).toFixed(FIX_DECIMAL_DIGITS)}
                 </p>
               </div>
             </div>
           ))}
-          {Object.keys(user.portfolio).length === 0 && (
+          {Object.keys(user.portfolio).length === ZERO && (
             <p className="text-sm text-muted-foreground">
               No positions yet. Start trading to build your portfolio!
             </p>

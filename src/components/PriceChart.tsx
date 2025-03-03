@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   LineChart,
@@ -8,7 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
+} from 'recharts';
 
 interface PriceChartProps {
   data: {
@@ -28,7 +28,7 @@ export function PriceChart({ data }: PriceChartProps) {
       <LineChart data={formattedData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" />
-        <YAxis domain={["auto", "auto"]} />
+        <YAxis domain={['auto', 'auto']} />
         <Tooltip />
         <Line
           type="monotone"

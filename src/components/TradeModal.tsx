@@ -13,7 +13,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { ZERO } from '@/constants/magicNumbers';
 
+const FIX_DECIMAL_DIGIT = 2;
 interface TradeModalProps {
   stock: Stock;
   type: 'buy' | 'sell';
@@ -47,17 +49,17 @@ export function TradeModal({ stock, type, onClose }: TradeModalProps) {
         portfolio: {
           ...user.portfolio,
           [stock.symbol]: {
-            quantity: (user.portfolio[stock.symbol]?.quantity || 0) + qty,
+            quantity: (user.portfolio[stock.symbol]?.quantity || ZERO) + qty,
             averagePrice:
-              ((user.portfolio[stock.symbol]?.averagePrice || 0) *
-                (user.portfolio[stock.symbol]?.quantity || 0) +
+              ((user.portfolio[stock.symbol]?.averagePrice || ZERO) *
+                (user.portfolio[stock.symbol]?.quantity || ZERO) +
                 total) /
-              ((user.portfolio[stock.symbol]?.quantity || 0) + qty),
+              ((user.portfolio[stock.symbol]?.quantity || ZERO) + qty),
           },
         },
       });
     } else {
-      const currentQty = user.portfolio[stock.symbol]?.quantity || 0;
+      const currentQty = user.portfolio[stock.symbol]?.quantity || ZERO;
       if (qty > currentQty) {
         toast({
           title: 'Insufficient shares',
@@ -69,7 +71,7 @@ export function TradeModal({ stock, type, onClose }: TradeModalProps) {
 
       const newQty = currentQty - qty;
       const newPortfolio = { ...user.portfolio };
-      if (newQty === 0) {
+      if (newQty === ZERO) {
         delete newPortfolio[stock.symbol];
       } else {
         newPortfolio[stock.symbol] = {
@@ -121,7 +123,8 @@ export function TradeModal({ stock, type, onClose }: TradeModalProps) {
             />
           </div>
           <div className="text-sm">
-            Total: ${(parseInt(quantity) * stock.price).toFixed(2)}
+            Total: $
+            {(parseInt(quantity) * stock.price).toFixed(FIX_DECIMAL_DIGIT)}
           </div>
         </div>
         <DialogFooter>

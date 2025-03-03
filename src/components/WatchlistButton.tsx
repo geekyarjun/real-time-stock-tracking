@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useStore } from "@/lib/store";
-import { Button } from "@/components/ui/button";
-import { Star } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import { useSession } from "next-auth/react";
+import { useState } from 'react';
+import { useStore } from '@/lib/store';
+import { Button } from '@/components/ui/button';
+import { Star } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import { useSession } from 'next-auth/react';
 
 interface WatchlistButtonProps {
   symbol: string;
@@ -39,8 +39,8 @@ export function WatchlistButton({ symbol, exchange }: WatchlistButtonProps) {
     } catch (error) {
       console.error(error);
       toast({
-        variant: "destructive",
-        description: "Failed to update watchlist",
+        variant: 'destructive',
+        description: 'Failed to update watchlist',
       });
     } finally {
       setIsLoading(false);
@@ -51,13 +51,13 @@ export function WatchlistButton({ symbol, exchange }: WatchlistButtonProps) {
 
   return (
     <Button
-      variant={isInWatchlist ? "secondary" : "outline"}
+      variant={isInWatchlist ? 'secondary' : 'outline'}
       size="sm"
       onClick={handleClick}
       disabled={isLoading}
     >
-      <Star className={`h-4 w-4 mr-2 ${isInWatchlist ? "fill-current" : ""}`} />
-      {isInWatchlist ? "Watchlisted" : "Add to Watchlist"}
+      <Star className={`h-4 w-4 mr-2 ${isInWatchlist ? 'fill-current' : ''}`} />
+      {isInWatchlist ? 'Watchlisted' : 'Add to Watchlist'}
     </Button>
   );
 }

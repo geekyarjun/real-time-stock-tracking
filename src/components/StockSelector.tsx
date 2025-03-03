@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { Stock } from "@/lib/types";
-import { useCallback, useState } from "react";
+import { Stock } from '@/lib/types';
+import { useCallback, useState } from 'react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { Check, ChevronsUpDown, X } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ZERO } from '@/constants/magicNumbers';
 
 interface StockSelectorProps {
   stocks: Stock[];
@@ -37,7 +38,7 @@ export function StockSelector({
         onSelect([...selectedStocks, symbol]);
       }
     },
-    [selectedStocks, onSelect]
+    [selectedStocks, onSelect],
   );
 
   const handleRemoveStock = useCallback(
@@ -46,7 +47,7 @@ export function StockSelector({
       e.stopPropagation();
       onSelect(selectedStocks.filter((s) => s !== symbol));
     },
-    [selectedStocks, onSelect]
+    [selectedStocks, onSelect],
   );
 
   return (
@@ -62,38 +63,34 @@ export function StockSelector({
           >
             <ChevronsUpDown className="h-4 w-4 opacity-50" />
             <span className="ml-2">
-              {selectedStocks.length === 0
-                ? "Select stocks"
+              {selectedStocks.length === ZERO
+                ? 'Select stocks'
                 : `${selectedStocks.length} selected`}
             </span>
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
           <div className="overflow-hidden rounded-md border border-input bg-popover text-popover-foreground">
-            <div
-              className="flex cursor-pointer items-center justify-between px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+            <button
+              className="flex cursor-pointer items-center justify-between px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground w-full"
               onClick={handleSelectAll}
-              role="button"
-              tabIndex={0}
             >
               <span>All Stocks</span>
               {selectedStocks.length === stocks.length && (
                 <Check className="h-4 w-4" />
               )}
-            </div>
+            </button>
             {stocks.map((stock) => (
-              <div
+              <button
                 key={stock.symbol}
-                className="flex cursor-pointer items-center justify-between px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                className="flex cursor-pointer items-center justify-between px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground w-full"
                 onClick={() => handleSelectStock(stock.symbol)}
-                role="button"
-                tabIndex={0}
               >
                 <span>{stock.symbol}</span>
                 {selectedStocks.includes(stock.symbol) && (
                   <Check className="h-4 w-4" />
                 )}
-              </div>
+              </button>
             ))}
           </div>
         </PopoverContent>

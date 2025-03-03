@@ -39,6 +39,7 @@ export default tseslint.config(
       // React rules
       ...react.configs.recommended.rules, // React recommended rules
       ...reactHooks.configs.recommended.rules, // React Hooks recommended rules
+      'react/prop-types': 'off',
 
       ...prettierConfig.rules,
 
@@ -49,7 +50,6 @@ export default tseslint.config(
       ],
 
       // Custom react rules
-      "react/prop-types": "off",
       "react/jsx-key": "error",
       "react/no-unescaped-entities": "off",
       "react/jsx-no-useless-fragment": "warn",

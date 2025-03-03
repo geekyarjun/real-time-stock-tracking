@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
 
 interface TokenChartProps {
   data?: {
@@ -18,12 +18,12 @@ export function TokenChart({ data, className }: TokenChartProps) {
     if (!data || !data.symbol || !data.exchange || !container.current) return;
 
     // Remove old widget before adding a new one
-    container.current.innerHTML = "";
+    container.current.innerHTML = '';
 
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.src =
-      "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
-    script.type = "text/javascript";
+      'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    script.type = 'text/javascript';
     script.async = true;
     script.innerHTML = `
         {
@@ -46,18 +46,18 @@ export function TokenChart({ data, className }: TokenChartProps) {
   return (
     <div
       className={cn(
-        "w-full h-[500px] border rounded-lg p-3 [&_iframe]:h-full",
-        className
+        'w-full h-[500px] border rounded-lg p-3 [&_iframe]:h-full',
+        className,
       )}
     >
       <div
         className="tradingview-widget-container"
         ref={container}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: '100%', width: '100%' }}
       >
         <div
           className="tradingview-widget-container__widget"
-          style={{ height: "calc(100% - 32px)", width: "100%" }}
+          style={{ height: 'calc(100% - 32px)', width: '100%' }}
         ></div>
       </div>
     </div>

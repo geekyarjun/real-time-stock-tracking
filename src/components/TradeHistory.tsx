@@ -8,6 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { ZERO } from '@/constants/magicNumbers';
+
+const FIX_DECIMAL_DIGIT = 2;
 
 export function TradeHistory() {
   const { trades } = useStore();
@@ -30,12 +33,13 @@ export function TradeHistory() {
                   {trade.type === 'buy' ? 'Bought' : 'Sold'} {trade.symbol}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {trade.quantity} shares @ ${trade.price.toFixed(2)}
+                  {trade.quantity} shares @ $
+                  {trade.price.toFixed(FIX_DECIMAL_DIGIT)}
                 </p>
               </div>
               <div className="text-right">
                 <p className="font-medium">
-                  ${(trade.quantity * trade.price).toFixed(2)}
+                  ${(trade.quantity * trade.price).toFixed(FIX_DECIMAL_DIGIT)}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {trade.timestamp.toLocaleString()}
@@ -43,7 +47,7 @@ export function TradeHistory() {
               </div>
             </div>
           ))}
-          {trades.length === 0 && (
+          {trades.length === ZERO && (
             <p className=" text-sm text-muted-foreground">
               No trading activity yet.
             </p>

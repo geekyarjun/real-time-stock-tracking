@@ -1,14 +1,15 @@
-import { z } from "zod";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import { z } from 'zod';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { MIN_PASSWORD_LENGTH } from '@/constants/constants';
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 export const userSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(MIN_PASSWORD_LENGTH),
 });
 
 export type UserCredentials = z.infer<typeof userSchema>;
@@ -23,10 +24,13 @@ export async function register(credentials: UserCredentials) {
   const { email, password } = userSchema.parse(credentials);
 
   if (users.has(email)) {
-    throw new Error("User already exists");
+    throw new Error('User already exists');
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const SALT_LENGTH = 10;
+  const hashedPassword = await bcrypt.hash(password, SALT_LENGTH);
+
+  // eslint-disable-next-line
   const id = Math.random().toString(36).substring(2, 11);
 
   users.set(email, {
@@ -35,7 +39,7 @@ export async function register(credentials: UserCredentials) {
     id,
   });
 
-  const token = jwt.sign({ email, id }, JWT_SECRET, { expiresIn: "24h" });
+  const token = jwt.sign({ email, id }, JWT_SECRET, { expiresIn: '24h' });
 
   return {
     token,
@@ -53,16 +57,16 @@ export async function login(credentials: UserCredentials) {
 
   const user = users.get(email);
   if (!user) {
-    throw new Error("Invalid credentials");
+    throw new Error('Invalid credentials');
   }
 
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) {
-    throw new Error("Invalid credentials");
+    throw new Error('Invalid credentials');
   }
 
   const token = jwt.sign({ email, id: user.id }, JWT_SECRET, {
-    expiresIn: "24h",
+    expiresIn: '24h',
   });
 
   return {
@@ -80,7 +84,7 @@ export function verifyToken(token: string) {
   try {
     return jwt.verify(token, JWT_SECRET) as { email: string; id: string };
   } catch {
-    throw new Error("Invalid token");
+    throw new Error('Invalid token');
   }
 }
 

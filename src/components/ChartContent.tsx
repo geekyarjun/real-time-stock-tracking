@@ -1,5 +1,6 @@
-"use client";
+'use client';
 
+import { ZERO } from '@/constants/magicNumbers';
 import {
   Area,
   Line,
@@ -10,7 +11,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   ComposedChart,
-} from "recharts";
+} from 'recharts';
 
 interface Data {
   [key: string]: number | string;
@@ -19,18 +20,23 @@ interface Data {
 
 interface ChartContentProps {
   data: Data[];
-  type: "line" | "area" | "bar";
+  type: 'line' | 'area' | 'bar';
   dataKeys: string[];
   showPercentages: boolean;
 }
 
 const COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-2))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))',
+  'hsl(var(--chart-5))',
 ];
+const HUNDRED = 100;
+const DOMAIN_0 = 80;
+const DOMAIN_1 = 120;
+const FIX_DECIMAL_DIGITS = 2;
+const domain = [DOMAIN_0, DOMAIN_1];
 
 export function ChartContent({
   data,
@@ -42,7 +48,7 @@ export function ChartContent({
   const chartData = showPercentages
     ? data.map((point, index, array) => {
         // Skip processing if no data points
-        if (array.length === 0) return point;
+        if (array.length === ZERO) return point;
 
         const normalized: Record<string, string | number> = {
           time: point.time,
@@ -51,7 +57,7 @@ export function ChartContent({
         dataKeys.forEach((key) => {
           // Get the first valid value for this key
           const baseValue = Number(
-            array.find((p) => p[key] !== undefined)?.[key]
+            array.find((p) => p[key] !== undefined)?.[key],
           );
           if (isNaN(baseValue)) return;
 
@@ -59,7 +65,7 @@ export function ChartContent({
           if (isNaN(currentValue)) return;
 
           // Calculate percentage change from base value
-          normalized[key] = (currentValue / baseValue) * 100;
+          normalized[key] = (currentValue / baseValue) * HUNDRED;
         });
 
         return normalized;
@@ -70,7 +76,7 @@ export function ChartContent({
     const color = COLORS[index % COLORS.length];
 
     switch (type) {
-      case "line":
+      case 'line':
         return (
           <Line
             key={dataKey}
@@ -81,7 +87,7 @@ export function ChartContent({
             dot={false}
           />
         );
-      case "area":
+      case 'area':
         return (
           <Area
             key={dataKey}
@@ -93,7 +99,7 @@ export function ChartContent({
             dot={false}
           />
         );
-      case "bar":
+      case 'bar':
         return (
           <Bar key={dataKey} dataKey={dataKey} fill={color} fillOpacity={0.8} />
         );
@@ -117,19 +123,21 @@ export function ChartContent({
         <YAxis
           stroke="hsl(var(--muted-foreground))"
           opacity={0.5}
-          domain={showPercentages ? [80, 120] : ["auto", "auto"]}
+          domain={showPercentages ? domain : ['auto', 'auto']}
           tick={{ fontSize: 12 }}
           width={45}
           tickFormatter={(value) => (showPercentages ? `${value}%` : value)}
         />
         <Tooltip
           contentStyle={{
-            backgroundColor: "hsl(var(--background))",
-            borderColor: "hsl(var(--border))",
+            backgroundColor: 'hsl(var(--background))',
+            borderColor: 'hsl(var(--border))',
           }}
-          labelStyle={{ color: "hsl(var(--foreground))" }}
+          labelStyle={{ color: 'hsl(var(--foreground))' }}
           formatter={(value: number) => [
-            showPercentages ? `${value.toFixed(2)}%` : value.toFixed(2),
+            showPercentages
+              ? `${value.toFixed(FIX_DECIMAL_DIGITS)}%`
+              : value.toFixed(FIX_DECIMAL_DIGITS),
           ]}
         />
         {dataKeys.map((dataKey, index) => renderChart(dataKey, index))}

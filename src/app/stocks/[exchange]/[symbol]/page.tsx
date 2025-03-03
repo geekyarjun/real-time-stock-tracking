@@ -1,6 +1,7 @@
-import { Suspense } from "react";
-import { StockPageClient } from "./StockPageClient";
-import { getStockData } from "@/lib/api";
+import { Suspense } from 'react';
+import { getStockData } from '@/lib/api';
+
+import { StockPageClient } from './StockPageClient';
 
 interface Props {
   params: Promise<{ symbol: string; exchange: string }>;

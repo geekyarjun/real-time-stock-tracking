@@ -1,41 +1,41 @@
-import { Stock } from "./types";
+import { Stock } from './types';
 
 export const initialStocks: Stock[] = [
   {
-    symbol: "AAPL",
-    name: "Apple Inc.",
+    symbol: 'AAPL',
+    name: 'Apple Inc.',
     price: 150.25,
     previousPrice: 149.8,
     percentageChange: 0.3,
     volume: 1000000,
   },
   {
-    symbol: "GOOGL",
-    name: "Alphabet Inc.",
+    symbol: 'GOOGL',
+    name: 'Alphabet Inc.',
     price: 2750.8,
     previousPrice: 2745.5,
     percentageChange: 0.19,
     volume: 500000,
   },
   {
-    symbol: "MSFT",
-    name: "Microsoft Corporation",
+    symbol: 'MSFT',
+    name: 'Microsoft Corporation',
     price: 285.9,
     previousPrice: 283.75,
     percentageChange: 0.76,
     volume: 750000,
   },
   {
-    symbol: "AMZN",
-    name: "Amazon.com Inc.",
+    symbol: 'AMZN',
+    name: 'Amazon.com Inc.',
     price: 3300.45,
     previousPrice: 3290.2,
     percentageChange: 0.31,
     volume: 600000,
   },
   {
-    symbol: "TSLA",
-    name: "Tesla Inc.",
+    symbol: 'TSLA',
+    name: 'Tesla Inc.',
     price: 890.5,
     previousPrice: 885.3,
     percentageChange: 0.59,
@@ -45,6 +45,8 @@ export const initialStocks: Stock[] = [
 
 // Function to generate a mock price update for a given stock
 export function generateMockPriceUpdate(stock: Stock): Stock {
+  /* eslint-disable no-magic-numbers */
+
   // Calculate a random price change within ±1% of the current price
   const priceChange = (Math.random() - 0.5) * (stock.price * 0.02);
   // Calculate the new price by adding the price change to the current price

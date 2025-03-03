@@ -1,8 +1,8 @@
-import { Suspense } from "react";
-import MarketOverview from "@/components/MarketOverview";
-import DashboardWatchlist from "@/components/DashboardWatchlist";
-import { StockChart } from "@/components/StockChart";
-import { ConnectionStatus } from "@/components/ConnectionStatus";
+import { Suspense } from 'react';
+import MarketOverview from '@/components/MarketOverview';
+import DashboardWatchlist from '@/components/DashboardWatchlist';
+import { StockChart } from '@/components/StockChart';
+import { ConnectionStatus } from '@/components/ConnectionStatus';
 
 export default function Home() {
   return (
