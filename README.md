@@ -14,6 +14,26 @@ npm  run dev
 
 ```
 
+## Environment Variables
+
+
+Here are the key environment variables used in this project:
+
+| Variable | Description | Default Value |
+
+| -------- | ------- | ------ |
+
+| NEXT_PUBLIC_STOCK_API_KEY | Environment type (development/production) | `development` |
+
+| GOOGLE_CLIENT_ID | Port for the server | `3100` |
+| GOOGLE_CLIENT_SECRET | Port for the server | `3100` |
+| NEXTAUTH_SECRET | Port for the server | `3100` |
+| NEXTAUTH_URL | Port for the server | `3100` |
+| NEXT_PUBLIC_SUPABASE_URL | Port for the server | `3100` |
+| NEXT_PUBLIC_SUPABASE_ANON_KEY | Port for the server | `3100` |  
+
+---
+
 ## Architectural Decisions
 
 ### 1. **Project Structure**
