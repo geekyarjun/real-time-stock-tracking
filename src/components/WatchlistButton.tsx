@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import { Button } from '@/components/ui/button';
 import { Star } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';

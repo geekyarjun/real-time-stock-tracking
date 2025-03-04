@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import {
   Card,
   CardContent,

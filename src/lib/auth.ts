@@ -88,6 +88,7 @@ export function verifyToken(token: string) {
   }
 }
 
+// Next auth options
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({

@@ -1,11 +1,11 @@
-export interface Stock {
-  symbol: string;
-  name: string;
-  price: number;
-  previousPrice: number;
-  percentageChange: number;
-  volume: number;
-}
+// export interface Stock {
+//   symbol: string;
+//   name: string;
+//   price: number;
+//   previousPrice: number;
+//   percentageChange: number;
+//   volume: number;
+// }
 
 export interface User {
   id: string;

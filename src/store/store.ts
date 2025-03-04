@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { Stock } from '@/services/stock/types';
 
-import { Stock, User, Trade } from './types';
-import { initialStocks } from './mockData';
-import { supabase } from './supabase';
+import { User, Trade } from '../types/types';
+import { initialStocks } from '../lib/mockData';
+import { supabase } from '../lib/supabase';
 
 interface WatchlistItem {
   symbol: string;

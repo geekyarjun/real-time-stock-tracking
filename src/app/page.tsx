@@ -23,6 +23,7 @@ export default function Home() {
               </Suspense>
             </div>
           </div>
+          {/* NOTE: Please check the code from this component. Above are just to mimic a live stock price tracking with mock data */}
           <div className="lg:col-span-4">
             <Suspense fallback={<div>Loading dashboard watchlist...</div>}>
               <DashboardWatchlist />

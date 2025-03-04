@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartTypeSelector } from '@/components/ChartTypeSelector';
 import { StockSelector } from '@/components/StockSelector';

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userSchema, type UserCredentials } from '@/lib/auth';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import {
   Dialog,
   DialogContent,

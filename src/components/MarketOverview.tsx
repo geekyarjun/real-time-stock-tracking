@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import { generateMockPriceUpdate } from '@/lib/mockData';
 import {
   Table,

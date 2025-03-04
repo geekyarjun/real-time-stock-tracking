@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getStockData } from '@/lib/api';
+import { fetchStockData } from '@/services/stock';
 
 import { StockPageClient } from './StockPageClient';
 
@@ -12,7 +12,9 @@ export default async function StockPage({ params }: Props) {
   const { symbol, exchange } = await params;
 
   // Initial server-side data fetch
-  const initialStockData = await getStockData(symbol);
+  const initialStockData = await fetchStockData(symbol, {
+    next: { revalidate: 60 },
+  });
 
   return (
     <div className="container mx-auto py-6 space-y-6">

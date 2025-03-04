@@ -1,6 +1,5 @@
 'use client';
 
-import { Stock } from '@/lib/types';
 import { useCallback, useState } from 'react';
 import {
   Popover,
@@ -11,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Check, ChevronsUpDown, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ZERO } from '@/constants/magicNumbers';
+import { Stock } from '@/services/stock/types';
 
 interface StockSelectorProps {
   stocks: Stock[];

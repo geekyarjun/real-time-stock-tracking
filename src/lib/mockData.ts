@@ -1,4 +1,4 @@
-import { Stock } from './types';
+import { Stock } from '@/services/stock/types';
 
 export const initialStocks: Stock[] = [
   {

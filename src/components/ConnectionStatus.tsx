@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import { AlertCircle, Wifi } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 

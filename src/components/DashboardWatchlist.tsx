@@ -2,13 +2,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ZERO } from '@/constants/magicNumbers';
-import { getStockData } from '@/lib/api';
-import { useStore } from '@/lib/store';
+import { useStore } from '@/store/store';
 import { formatVolume } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowDownIcon, ArrowUpIcon, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { fetchStockFromAPI } from '@/services/stock/useFetchStockData';
 
 const FIX_DECIMAL_DIGITS = 2;
 
@@ -34,7 +34,7 @@ export default function DashboardWatchlist() {
       // Batch fetch all watchlisted stocks
       const promises = watchlist.map(async (stock) => {
         try {
-          const data = await getStockData(stock.symbol);
+          const data = await fetchStockFromAPI(stock.symbol);
           return { symbol: stock.symbol, ...data };
         } catch (error) {
           console.error(`Error fetching ${stock.symbol}:`, error);

@@ -1,47 +1,25 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import { useStore } from '@/lib/store';
 import { StockInfo } from '@/components/StockInfo';
 import { TokenChart } from '@/components/TokenChart';
 import { WatchlistButton } from '@/components/WatchlistButton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/components/ui/use-toast';
-import { Stock } from '@/lib/types';
+import { Stock } from '@/services/stock/types';
+import { useFetchStockData } from '@/services/stock/useFetchStockData';
+import { useStore } from '@/store/store';
 
 interface Props {
   symbol: string;
   exchange: string;
-  initialStockData: Stock; // I will update the type according to the API response
+  initialStockData: Stock;
 }
 
 const FIX_DECIMAL_DIGITS = 2;
 
 export function StockPageClient({ symbol, exchange, initialStockData }: Props) {
-  const { toast } = useToast();
   const { user } = useStore();
-
-  // Client-side polling for price updates
-  const { data: stockData } = useQuery({
-    queryKey: ['stock', symbol],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${process.env.NEXT_PUBLIC_STOCK_API_KEY}`,
-      );
-      const data = await response.json();
-
-      if (data.status === 'error') {
-        toast({
-          variant: 'destructive',
-          title: 'Error fetching stock data',
-          description: data.message || 'Something went wrong',
-        });
-        throw new Error(data.message);
-      }
-
-      return data;
-    },
+  const { data: stockData } = useFetchStockData(symbol, {
     refetchInterval: 10000, // Refetch every 10 seconds
     initialData: initialStockData, // Use server-fetched data as initial data
   });
